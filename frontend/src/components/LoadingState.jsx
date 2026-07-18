@@ -1,12 +1,12 @@
-import { Brain, Loader2 } from 'lucide-react';
+import { Brain } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 const MESSAGES = [
-  'Crafting your questions',
+  'Brewing your questions',
   'Consulting the AI oracle',
-  'Generating brain teasers',
-  'Polishing answer options',
-  'Almost ready',
+  'Weaving tricky distractors',
+  'Calibrating difficulty',
+  'Almost there',
 ];
 
 export default function LoadingState({ topic }) {
@@ -19,84 +19,66 @@ export default function LoadingState({ topic }) {
 
   return (
     <div
-      style={{
-        flex: 1,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: '28px',
-        padding: '40px',
-        minHeight: '100vh',
-      }}
+      className="flex-1 flex flex-col items-center justify-center gap-7 p-10"
+      style={{ minHeight: '100vh' }}
     >
       {/* Animated icon stack */}
-      <div style={{ position: 'relative', width: '96px', height: '96px' }}>
+      <div className="relative" style={{ width: '96px', height: '96px' }}>
         {/* Outer spinner ring */}
         <div
-          className="loading-spinner"
+          className="loading-spinner absolute inset-0 rounded-full"
           style={{
-            position: 'absolute',
-            inset: 0,
-            borderRadius: '50%',
-            border: '3px solid #E5E5E5',
-            borderTopColor: '#58CC02',
+            border: '2px solid rgba(139,92,246,0.15)',
+            borderTopColor: '#8B5CF6',
+            boxShadow: '0 0 20px rgba(139,92,246,0.25)',
           }}
         />
         {/* Brain icon centre */}
-        <div
-          className="loading-icon-wrap"
-          style={{
-            position: 'absolute',
-            inset: 0,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <Brain size={44} color="#58CC02" strokeWidth={1.5} />
+        <div className="loading-icon-wrap absolute inset-0 flex items-center justify-center">
+          <Brain size={44} color="#A78BFA" strokeWidth={1.5} />
         </div>
       </div>
 
       {/* Message */}
-      <div style={{ textAlign: 'center' }}>
+      <div className="text-center">
         <p
+          className="font-bold mb-2"
           style={{
-            fontWeight: 800,
-            fontSize: '1.4rem',
-            color: '#3C3C3C',
-            marginBottom: '8px',
+            fontSize: '1.3rem',
+            color: '#F1F5F9',
             minHeight: '2rem',
+            fontFamily: "'Space Grotesk', sans-serif",
           }}
         >
           {MESSAGES[msgIndex]}…
         </p>
         {topic && (
-          <p style={{ color: '#777', fontSize: '1rem' }}>
+          <p className="text-base" style={{ color: '#94A3B8' }}>
             Topic:{' '}
-            <span style={{ color: '#58CC02', fontWeight: 700 }}>{topic}</span>
+            <span className="font-semibold" style={{ color: '#A78BFA' }}>{topic}</span>
           </p>
         )}
       </div>
 
       {/* Progress dots */}
-      <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+      <div className="flex items-center gap-2">
         {MESSAGES.map((_, i) => (
           <div
             key={i}
             style={{
-              width: i === msgIndex % MESSAGES.length ? '24px' : '10px',
+              width: i === msgIndex % MESSAGES.length ? '28px' : '10px',
               height: '10px',
               borderRadius: '999px',
-              background: i === msgIndex % MESSAGES.length ? '#58CC02' : '#E5E5E5',
-              transition: 'all 0.3s ease',
+              background: i === msgIndex % MESSAGES.length ? '#8B5CF6' : 'rgba(148,163,184,0.2)',
+              transition: 'all 0.35s ease',
+              boxShadow: i === msgIndex % MESSAGES.length ? '0 0 10px rgba(139,92,246,0.5)' : 'none',
             }}
           />
         ))}
       </div>
 
-      <p style={{ fontSize: '0.85rem', color: '#AFAFAF' }}>
-        Usually takes 5–10 seconds
+      <p className="text-xs font-medium" style={{ color: '#475569' }}>
+        Brewing your questions — usually 5–10 seconds
       </p>
     </div>
   );

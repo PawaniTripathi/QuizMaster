@@ -74,38 +74,44 @@ export default function QuizPage() {
       />
 
       {/* ── Main content ─────────────────────────── */}
-      <div className="content-area">
-        <main style={{ padding: '48px 56px', width: '100%', maxWidth: '900px' }}>
-          {/* Progress and Score Header */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' }}>
-            <div style={{ flex: 1, maxWidth: '60%' }}>
-              <ProgressBar current={currentIndex + 1} total={questions.length} />
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-              {!hasAnswered && (
-                <Timer duration={30} onTimeUp={handleSkip} questionIndex={currentIndex} />
-              )}
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  fontWeight: 800,
-                  fontSize: '1rem',
-                  color: '#3C3C3C',
-                  background: 'white',
-                  padding: '8px 16px',
-                  borderRadius: '12px',
-                  border: '2px solid #E5E5E5',
-                }}
-              >
-                <Target size={18} color="#1CB0F6" strokeWidth={2.5} />
-                Score: <span style={{ color: '#1CB0F6', marginLeft: '4px' }}>{liveScore}</span> / {questions.length}
-              </div>
-            </div>
+      <div className="content-area" style={{ paddingTop: '16px', paddingRight: '40px', paddingLeft: '40px' }}>
+
+        {/* ── Sticky progress header ─────────────── */}
+        <div
+          className="sticky top-0 z-40 flex items-center justify-between gap-4 border-b"
+          style={{
+            padding: '12px 24px',
+            background: 'rgba(8,12,24,0.92)',
+            backdropFilter: 'blur(20px)',
+            borderColor: 'rgba(148,163,184,0.08)',
+          }}
+        >
+          <div style={{ flex: 1, maxWidth: '55%' }}>
+            <ProgressBar current={currentIndex + 1} total={questions.length} />
           </div>
 
-          {/* Question card */}
+          <div className="flex items-center gap-4">
+            {!hasAnswered && (
+              <Timer duration={30} onTimeUp={handleSkip} questionIndex={currentIndex} />
+            )}
+            <div
+              className="flex items-center gap-2 px-3 py-1.5 rounded-xl border font-bold text-sm"
+              style={{
+                background: 'rgba(13,18,37,0.85)',
+                borderColor: 'rgba(148,163,184,0.12)',
+                color: '#F1F5F9',
+                backdropFilter: 'blur(10px)',
+              }}
+            >
+              <Target size={16} color="#A78BFA" strokeWidth={2.5} />
+              <span style={{ color: '#A78BFA' }}>{liveScore}</span>
+              <span style={{ color: '#475569' }}>/ {questions.length}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* ── Question area ─────────────────────── */}
+        <main className="w-full" style={{ maxWidth: '860px', paddingTop: '12px', paddingBottom: '16px' }}>
           {/*
            * WRONG-ANSWER BUG FIX:
            * FeedbackBanner and the Continue button are rendered OUTSIDE the
@@ -116,7 +122,7 @@ export default function QuizPage() {
            */}
           <QuizCard key={question.id} question={question} questionIndex={currentIndex}>
             {/* Answer options — stable list, never re-mounts on answer */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <div className="flex flex-col gap-4">
               {question.options.map((option, idx) => (
                 <AnswerOption
                   key={idx}
@@ -139,53 +145,75 @@ export default function QuizPage() {
             {/* Next / Submit button */}
             {(canGoNext || canGoPrev || !hasAnswered) && (
               <div
-                style={{
-                  marginTop: '28px',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  animation: 'var(--animate-fade-up)',
-                }}
+                className="flex justify-between items-center"
+                style={{ marginTop: '24px', animation: 'var(--animate-fade-up)' }}
               >
-                <div style={{ display: 'flex', gap: '12px' }}>
+                <div className="flex gap-2">
                   {canGoPrev && (
                     <button
                       onClick={handlePrev}
-                      className="btn-duo"
-                      style={{ background: 'transparent', color: '#777', border: '2px solid #E5E5E5', padding: '12px 18px' }}
+                      className="flex items-center gap-2 font-bold rounded-xl border transition-all"
+                      style={{
+                        padding: '12px 20px',
+                        fontSize: '1rem',
+                        background: 'rgba(13,18,37,0.7)',
+                        color: '#94A3B8',
+                        borderColor: 'rgba(148,163,184,0.15)',
+                        backdropFilter: 'blur(8px)',
+                        cursor: 'pointer',
+                      }}
                       type="button"
                     >
-                      <ChevronLeft size={16} strokeWidth={2.5} /> Previous
+                      <ChevronLeft size={15} strokeWidth={2.5} /> Back
                     </button>
                   )}
                   {!hasAnswered && (
                     <button
                       onClick={handleSkip}
-                      className="btn-duo"
-                      style={{ background: '#F7F7F7', color: '#777', border: '2px solid #E5E5E5', padding: '12px 18px' }}
+                      className="flex items-center gap-2 font-bold rounded-xl border transition-all"
+                      style={{
+                        padding: '12px 20px',
+                        fontSize: '1rem',
+                        background: 'rgba(13,18,37,0.5)',
+                        color: '#94A3B8',
+                        borderColor: 'rgba(148,163,184,0.12)',
+                        backdropFilter: 'blur(8px)',
+                        cursor: 'pointer',
+                      }}
                       type="button"
                     >
-                      Skip <ChevronRight size={16} strokeWidth={2.5} />
+                      Pass <ChevronRight size={15} strokeWidth={2.5} />
                     </button>
                   )}
                 </div>
-                
+
                 <div>
                   {canGoNext && (
                     <button
                       onClick={handleNext}
                       disabled={submitting || (isLastQuestion && !hasAnswered)}
-                      className="btn-duo btn-duo-green"
+                      className="flex items-center gap-2 font-bold rounded-xl transition-all"
                       type="button"
                       id="next-question-btn"
-                      style={{ minWidth: '180px' }}
+                      style={{
+                        minWidth: '172px',
+                        padding: '12px 28px',
+                        fontSize: '1rem',
+                        background: 'linear-gradient(135deg, #6D28D9 0%, #8B5CF6 55%, #A78BFA 100%)',
+                        color: 'white',
+                        border: '1px solid rgba(139,92,246,0.45)',
+                        boxShadow: '0 4px 16px rgba(139,92,246,0.35)',
+                        cursor: submitting || (isLastQuestion && !hasAnswered) ? 'not-allowed' : 'pointer',
+                        opacity: submitting || (isLastQuestion && !hasAnswered) ? 0.5 : 1,
+                        justifyContent: 'center',
+                      }}
                     >
                       {submitting ? (
-                        <><Loader2 size={16} strokeWidth={2.5} style={{ animation: 'spin-slow 1s linear infinite' }} /> Submitting…</>
+                        <><Loader2 size={15} strokeWidth={2.5} style={{ animation: 'spin-slow 1s linear infinite' }} /> Submitting…</>
                       ) : (isLastQuestion && !isReviewing) ? (
-                        <><Trophy size={16} strokeWidth={2.5} /> See Results</>
+                        <><Trophy size={15} strokeWidth={2.5} /> View Results</>
                       ) : (
-                        <>{isReviewing && !hasAnswered ? 'Next' : 'Continue'} <ChevronRight size={16} strokeWidth={2.5} /></>
+                        <>{isReviewing && !hasAnswered ? 'Next' : 'Continue'} <ChevronRight size={15} strokeWidth={2.5} /></>
                       )}
                     </button>
                   )}

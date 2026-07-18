@@ -1,60 +1,59 @@
+import { AlertOctagon, RefreshCw } from 'lucide-react';
+
 export default function ErrorState({ message, onRetry }) {
   return (
     <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        minHeight: '60vh',
-        gap: '20px',
-        padding: '40px',
-        textAlign: 'center',
-      }}
+      className="flex flex-col items-center justify-center gap-5 p-10 text-center"
+      style={{ minHeight: '60vh' }}
     >
-      {/* Sad owl / emoji */}
+      {/* Error icon */}
       <div
+        className="flex items-center justify-center rounded-full border"
         style={{
-          width: '100px',
-          height: '100px',
-          borderRadius: '50%',
-          background: '#FFD2D2',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: '48px',
-          border: '3px solid #FF4B4B',
+          width: '96px',
+          height: '96px',
+          background: 'rgba(239,68,68,0.1)',
+          borderColor: 'rgba(239,68,68,0.35)',
+          boxShadow: '0 0 28px rgba(239,68,68,0.15)',
         }}
       >
-        😕
+        <AlertOctagon size={44} color="#F87171" strokeWidth={1.5} />
       </div>
 
       <div>
         <h2
+          className="font-black mb-2.5"
           style={{
-            fontWeight: 800,
-            fontSize: '1.6rem',
-            color: '#3C3C3C',
-            marginBottom: '10px',
+            fontSize: '1.55rem',
+            color: '#F1F5F9',
+            fontFamily: "'Space Grotesk', sans-serif",
           }}
         >
-          Oops! Something went wrong
+          Hmm, that didn't work
         </h2>
         <p
-          style={{
-            color: '#777',
-            fontSize: '1rem',
-            maxWidth: '400px',
-            lineHeight: 1.6,
-          }}
+          className="text-sm leading-relaxed max-w-sm mx-auto"
+          style={{ color: '#94A3B8' }}
         >
-          {message || "We couldn't generate your quiz. Please try again!"}
+          {message || "Couldn't conjure your quiz. Give it another shot."}
         </p>
       </div>
 
       {onRetry && (
-        <button onClick={onRetry} className="btn-duo btn-duo-blue" type="button">
-          🔄 Try Again
+        <button
+          onClick={onRetry}
+          type="button"
+          className="inline-flex items-center gap-2 font-bold rounded-xl px-5 py-3 text-sm border transition-all"
+          style={{
+            background: 'linear-gradient(135deg, #0E7490 0%, #06B6D4 100%)',
+            color: 'white',
+            borderColor: 'rgba(6,182,212,0.4)',
+            boxShadow: '0 4px 16px rgba(6,182,212,0.25)',
+            cursor: 'pointer',
+          }}
+        >
+          <RefreshCw size={15} strokeWidth={2.5} />
+          Retry
         </button>
       )}
     </div>

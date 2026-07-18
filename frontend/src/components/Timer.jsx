@@ -17,31 +17,24 @@ export default function Timer({ duration = 30, onTimeUp, questionIndex }) {
   }, [questionIndex, duration, onTimeUp]);
 
   const isLow = timeLeft <= 5;
-  const color = isLow ? '#FF4B4B' : '#1CB0F6';
+  const color = isLow ? '#F87171' : '#22D3EE';
   const Icon  = isLow ? AlarmClock : Clock;
 
   return (
     <div
+      className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border"
       style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '8px',
-        background: isLow ? '#FFD2D2' : '#D2F4FF',
-        border: `2px solid ${color}`,
-        borderRadius: '999px',
-        padding: '6px 16px',
+        background: isLow ? 'rgba(239,68,68,0.12)' : 'rgba(6,182,212,0.12)',
+        borderColor: isLow ? 'rgba(239,68,68,0.4)' : 'rgba(6,182,212,0.35)',
+        backdropFilter: 'blur(8px)',
+        boxShadow: isLow ? '0 0 12px rgba(239,68,68,0.2)' : '0 0 12px rgba(6,182,212,0.15)',
       }}
       aria-label={`${timeLeft} seconds remaining`}
     >
-      <Icon size={16} color={color} strokeWidth={2.5} />
+      <Icon size={14} color={color} strokeWidth={2.5} />
       <span
-        style={{
-          fontWeight: 800,
-          fontSize: '1rem',
-          color,
-          minWidth: '32px',
-          fontVariantNumeric: 'tabular-nums',
-        }}
+        className="font-bold text-sm tabular-nums"
+        style={{ color, minWidth: '28px' }}
       >
         {timeLeft}s
       </span>

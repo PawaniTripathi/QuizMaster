@@ -32,6 +32,7 @@ import {
   BookOpen,
   Layers,
   Hash,
+  RotateCcw,
 } from 'lucide-react';
 
 /* ── Brand header (always visible) ───────────────────────────────────── */
@@ -42,109 +43,45 @@ function SidebarBrand() {
   return (
     <button
       onClick={() => { resetQuiz(); navigate('/'); }}
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '12px',
-        marginBottom: '28px',
-        background: 'none',
-        border: 'none',
-        cursor: 'pointer',
-        padding: 0,
-        textAlign: 'left',
-        width: '100%'
-      }}
+      className="flex items-center gap-3 w-full text-left"
+      style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, marginBottom: '24px' }}
       aria-label="Go to Home"
     >
       <div
+        className="flex items-center justify-center w-10 h-10 rounded-xl shrink-0"
         style={{
-          width: '44px',
-          height: '44px',
-          borderRadius: '12px',
-          background: 'linear-gradient(135deg, #58CC02 0%, #4CAD02 100%)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          boxShadow: '0 4px 0 #3a9a00',
-          flexShrink: 0,
+          background: 'linear-gradient(135deg, #6D28D9 0%, #8B5CF6 55%, #A78BFA 100%)',
+          boxShadow: '0 4px 16px rgba(139,92,246,0.4)',
         }}
       >
-        <Brain size={24} color="white" strokeWidth={2.5} />
+        <Brain size={22} color="white" strokeWidth={2.5} />
       </div>
       <div>
-        <h2 style={{ fontWeight: 900, fontSize: '1.2rem', color: '#3C3C3C', lineHeight: 1 }}>
+        <h2
+          className="font-black"
+          style={{ color: '#F1F5F9', fontFamily: "'Space Grotesk', sans-serif", fontSize: '22px', lineHeight: 1 }}
+        >
           QuizGenius
         </h2>
-        <p style={{ fontSize: '0.72rem', color: '#AFAFAF', fontWeight: 700, marginTop: '2px', letterSpacing: '0.04em' }}>
-          AI-POWERED QUIZZES
-        </p>
       </div>
     </button>
-  );
-}
-
-/* ── Stat cards (home sidebar bottom) ─────────────────────────────────── */
-function StatCard({ icon: Icon, iconColor, iconBg, label, value }) {
-  return (
-    <div
-      style={{
-        background: '#F7F7F7',
-        border: '2px solid #E5E5E5',
-        borderRadius: '12px',
-        padding: '12px 14px',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '12px',
-      }}
-    >
-      <div
-        style={{
-          width: '36px',
-          height: '36px',
-          borderRadius: '8px',
-          background: iconBg,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          flexShrink: 0,
-        }}
-      >
-        <Icon size={18} color={iconColor} strokeWidth={2.5} />
-      </div>
-      <div>
-        <p style={{ fontSize: '0.72rem', color: '#AFAFAF', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-          {label}
-        </p>
-        <p style={{ fontSize: '0.88rem', color: '#3C3C3C', fontWeight: 800, marginTop: '1px' }}>{value}</p>
-      </div>
-    </div>
   );
 }
 
 /* ── Difficulty badge ─────────────────────────────────────────────────── */
 function DifficultyBadge({ level }) {
   const map = {
-    easy:   { Icon: Leaf,  color: '#58CC02', bg: '#D7FFB8', border: '#58CC02', label: 'Easy' },
-    medium: { Icon: Flame, color: '#FFC800', bg: '#FFF5CC', border: '#FFC800', label: 'Medium' },
-    hard:   { Icon: Skull, color: '#FF4B4B', bg: '#FFD2D2', border: '#FF4B4B', label: 'Hard' },
+    easy:   { Icon: Leaf,  color: '#34D399', bg: 'rgba(16,185,129,0.12)',  border: 'rgba(16,185,129,0.4)',  label: 'Easy' },
+    medium: { Icon: Flame, color: '#FCD34D', bg: 'rgba(245,158,11,0.12)',  border: 'rgba(245,158,11,0.35)', label: 'Medium' },
+    hard:   { Icon: Skull, color: '#F87171', bg: 'rgba(239,68,68,0.12)',   border: 'rgba(239,68,68,0.4)',   label: 'Hard' },
   };
   const d = map[level] || map.medium;
   return (
     <span
-      style={{
-        background: d.bg,
-        color: d.color,
-        border: `2px solid ${d.border}`,
-        borderRadius: '999px',
-        padding: '4px 12px',
-        fontWeight: 800,
-        fontSize: '0.82rem',
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: '5px',
-      }}
+      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-bold text-xs border"
+      style={{ background: d.bg, color: d.color, borderColor: d.border }}
     >
-      <d.Icon size={13} strokeWidth={2.5} />
+      <d.Icon size={12} strokeWidth={2.5} />
       {d.label}
     </span>
   );
@@ -153,11 +90,11 @@ function DifficultyBadge({ level }) {
 /* ── Info row (results sidebar) ───────────────────────────────────────── */
 function InfoRow({ label, value, highlight }) {
   return (
-    <div style={{ borderBottom: '2px solid #E5E5E5', paddingBottom: '10px' }}>
-      <p style={{ fontSize: '0.72rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#AFAFAF', marginBottom: '2px' }}>
+    <div className="pb-2.5" style={{ borderBottom: '1px solid rgba(148,163,184,0.1)' }}>
+      <p className="text-xs font-bold uppercase mb-0.5" style={{ color: '#475569', letterSpacing: '0.06em' }}>
         {label}
       </p>
-      <p style={{ fontWeight: 800, color: highlight ? '#58CC02' : '#3C3C3C', fontSize: '0.92rem', textTransform: 'capitalize' }}>
+      <p className="font-bold text-sm capitalize" style={{ color: highlight ? '#A78BFA' : '#F1F5F9' }}>
         {value}
       </p>
     </div>
@@ -166,15 +103,48 @@ function InfoRow({ label, value, highlight }) {
 
 /* ── Divider ──────────────────────────────────────────────────────────── */
 function SidebarDivider() {
-  return <div style={{ height: '1px', background: '#E5E5E5', margin: '16px 0' }} />;
+  return (
+    <div
+      style={{ height: '1px', background: 'linear-gradient(90deg, transparent, rgba(139,92,246,0.3), transparent)', marginBottom: '24px' }}
+    />
+  );
 }
 
 /* ── Section label ────────────────────────────────────────────────────── */
 function SectionLabel({ children }) {
   return (
-    <p style={{ fontSize: '0.72rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#AFAFAF', marginBottom: '10px' }}>
+    <p
+      className="text-xs font-bold uppercase"
+      style={{ color: '#475569', letterSpacing: '0.07em', marginBottom: '10px' }}
+    >
       {children}
     </p>
+  );
+}
+
+/* ── Stat card ─────────────────────────────────────────────────────────── */
+function StatCard({ icon: Icon, iconColor, iconBg, label, value }) {
+  return (
+    <div
+      className="flex items-center gap-3 rounded-xl p-3 border"
+      style={{
+        background: 'rgba(13,18,37,0.6)',
+        borderColor: 'rgba(148,163,184,0.08)',
+      }}
+    >
+      <div
+        className="flex items-center justify-center w-8 h-8 rounded-lg shrink-0"
+        style={{ background: iconBg }}
+      >
+        <Icon size={16} color={iconColor} strokeWidth={2.5} />
+      </div>
+      <div>
+        <p className="text-xs font-bold uppercase" style={{ color: '#475569', letterSpacing: '0.05em' }}>
+          {label}
+        </p>
+        <p className="text-sm font-bold mt-0.5" style={{ color: '#F1F5F9' }}>{value}</p>
+      </div>
+    </div>
   );
 }
 
@@ -204,40 +174,38 @@ export default function Sidebar({
       <aside className="sidebar">
         <SidebarBrand />
 
-        {/* Tagline */}
-        <p style={{ fontSize: '0.88rem', color: '#777', lineHeight: 1.5, marginBottom: '20px' }}>
-          Pick any topic and let Groq AI generate a personalized quiz in seconds.
+        <p className="text-sm font-medium mb-5 leading-relaxed" style={{ color: '#94A3B8' }}>
+          Any subject, any depth — your quiz, built by AI in seconds.
         </p>
 
         <SidebarDivider />
 
-        {/* Feature stats */}
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '10px' }}>
+        <div className="flex-1 flex flex-col gap-2.5">
           <StatCard
             icon={InfinityIcon}
-            iconColor="#1CB0F6"
-            iconBg="#D2F4FF"
+            iconColor="#22D3EE"
+            iconBg="rgba(6,182,212,0.15)"
             label="Topics Available"
             value="Unlimited"
           />
           <StatCard
             icon={Bot}
-            iconColor="#CE82FF"
-            iconBg="#F3E8FF"
+            iconColor="#A78BFA"
+            iconBg="rgba(139,92,246,0.15)"
             label="Powered by"
             value="Groq AI"
           />
           <StatCard
             icon={List}
-            iconColor="#58CC02"
-            iconBg="#D7FFB8"
+            iconColor="#34D399"
+            iconBg="rgba(16,185,129,0.15)"
             label="Questions per Quiz"
             value="5 – 15"
           />
           <StatCard
             icon={Layers}
-            iconColor="#FFC800"
-            iconBg="#FFF5CC"
+            iconColor="#FCD34D"
+            iconBg="rgba(245,158,11,0.15)"
             label="Difficulty Modes"
             value="Easy · Medium · Hard"
           />
@@ -252,89 +220,92 @@ export default function Sidebar({
       <aside className="sidebar">
         <SidebarBrand />
 
-        {/* Topic & difficulty */}
-        <div style={{ marginBottom: '16px' }}>
+        {/* Topic */}
+        <div style={{ marginBottom: '24px' }}>
           <SectionLabel>Topic</SectionLabel>
-          <p style={{ fontWeight: 800, fontSize: '0.95rem', color: '#3C3C3C', marginBottom: '14px' }}>{topic}</p>
-          <SectionLabel>Difficulty</SectionLabel>
+          <p className="font-bold text-sm leading-snug" style={{ color: '#F1F5F9' }}>{topic}</p>
+        </div>
+
+        {/* Level */}
+        <div style={{ marginBottom: '24px' }}>
+          <SectionLabel>Level</SectionLabel>
           <DifficultyBadge level={difficulty} />
         </div>
 
         <SidebarDivider />
 
-        {/* Question list */}
-        <div style={{ flex: 1, overflowY: 'auto', minHeight: 0 }}>
-          <SectionLabel>Questions</SectionLabel>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-            {questions.map((q, i) => {
-              const isDone    = answers[q.id] !== undefined;
-              const isCurrent = i === currentIndex;
-              const isVisited = i <= highestVisitedIndex;
-              
-              let IconComp = Circle;
-              let iconColor = "#AFAFAF";
-              let iconBg = "#E5E5E5";
-              let strokeWidth = 2;
+        {/* Question map — compact grid */}
+        <div className="flex-1 overflow-y-auto min-h-0">
+          <div style={{ marginBottom: '24px' }}>
+            <SectionLabel>Question Map</SectionLabel>
+            <div className="grid grid-cols-4 gap-2">
+              {questions.map((q, i) => {
+                const isDone    = answers[q.id] !== undefined;
+                const isCurrent = i === currentIndex;
+                const isVisited = i <= highestVisitedIndex;
 
-              if (isDone) {
-                const isCorrect = answerKey.find(k => k.id === q.id)?.correctIndex === answers[q.id];
-                IconComp = isCorrect ? CheckCircle2 : XCircle;
-                iconBg = isCorrect ? '#58CC02' : '#FF4B4B';
-                iconColor = "white";
-                strokeWidth = 3;
-              } else if (isCurrent) {
-                IconComp = Dot;
-                iconBg = '#1CB0F6';
-                iconColor = "white";
-                strokeWidth = 4;
-              } else if (isVisited) {
-                IconComp = CircleDashed;
-                iconBg = 'transparent';
-                iconColor = "#AFAFAF";
-                strokeWidth = 2;
-              }
+                let bg = 'rgba(148,163,184,0.07)';
+                let border = 'rgba(148,163,184,0.12)';
+                let color = '#475569';
+                let icon = null;
 
-              return (
-                <button
-                  key={q.id}
-                  type="button"
-                  onClick={() => { if (isVisited && goToQuestion) goToQuestion(i); }}
-                  disabled={!isVisited}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '12px',
-                    padding: '8px 12px',
-                    borderRadius: '10px',
-                    background: isCurrent ? 'rgba(28, 176, 246, 0.1)' : 'transparent',
-                    border: 'none',
-                    textAlign: 'left',
-                    cursor: isVisited ? 'pointer' : 'default',
-                    opacity: isVisited ? 1 : 0.6,
-                    transition: 'background 0.2s',
-                    width: '100%',
-                  }}
-                >
-                  <span
+                if (isDone) {
+                  const isCorrect = answerKey.find(k => k.id === q.id)?.correctIndex === answers[q.id];
+                  bg = isCorrect ? 'rgba(16,185,129,0.15)' : 'rgba(239,68,68,0.15)';
+                  border = isCorrect ? 'rgba(16,185,129,0.4)' : 'rgba(239,68,68,0.4)';
+                  color = isCorrect ? '#34D399' : '#F87171';
+                } else if (isCurrent) {
+                  bg = 'rgba(139,92,246,0.2)';
+                  border = 'rgba(139,92,246,0.5)';
+                  color = '#A78BFA';
+                } else if (isVisited) {
+                  bg = 'rgba(148,163,184,0.07)';
+                  border = 'rgba(148,163,184,0.2)';
+                  color = '#94A3B8';
+                }
+
+                return (
+                  <button
+                    key={q.id}
+                    type="button"
+                    onClick={() => { if (isVisited && goToQuestion) goToQuestion(i); }}
+                    disabled={!isVisited}
+                    className="flex items-center justify-center rounded-lg font-bold text-xs transition-all"
                     style={{
-                      width: '22px',
-                      height: '22px',
-                      borderRadius: '50%',
-                      background: iconBg,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      flexShrink: 0,
+                      width: '100%',
+                      aspectRatio: '1',
+                      background: bg,
+                      border: `1px solid ${border}`,
+                      color,
+                      cursor: isVisited ? 'pointer' : 'default',
+                      opacity: isVisited ? 1 : 0.35,
+                      fontFamily: "'Space Grotesk', sans-serif",
+                      fontSize: '0.78rem',
                     }}
+                    aria-label={`Go to question ${i + 1}`}
                   >
-                    <IconComp size={14} color={iconColor} strokeWidth={strokeWidth} />
-                  </span>
-                  <span style={{ fontSize: '0.88rem', fontWeight: isCurrent ? 800 : 600, color: isCurrent ? '#1CB0F6' : '#555' }}>
-                    Question {i + 1}
-                  </span>
-                </button>
-              );
-            })}
+                    {i + 1}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Legend */}
+          <div className="flex flex-col gap-[10px]" style={{ marginBottom: '24px' }}>
+            {[
+              { color: '#34D399', border: 'rgba(16,185,129,0.4)', label: 'Correct' },
+              { color: '#F87171', border: 'rgba(239,68,68,0.4)', label: 'Wrong' },
+              { color: '#A78BFA', border: 'rgba(139,92,246,0.5)', label: 'Current' },
+            ].map(({ color, border, label }) => (
+              <div key={label} className="flex items-center gap-2">
+                <div
+                  className="w-3 h-3 rounded-sm border"
+                  style={{ background: color + '22', borderColor: border }}
+                />
+                <span className="text-xs font-medium" style={{ color: '#475569' }}>{label}</span>
+              </div>
+            ))}
           </div>
         </div>
       </aside>
@@ -343,58 +314,97 @@ export default function Sidebar({
 
   /* ── RESULTS variant ──────────────────────────────────────────────── */
   if (variant === 'results') {
+    const pct = total > 0 ? Math.round((score / total) * 100) : 0;
     return (
       <aside className="sidebar">
         <SidebarBrand />
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '16px' }}>
+        {/* Score highlight */}
+        <div
+          className="rounded-xl p-4 text-center border"
+          style={{
+            background: 'rgba(139,92,246,0.1)',
+            borderColor: 'rgba(139,92,246,0.25)',
+            marginBottom: '24px',
+          }}
+        >
+          <p className="text-xs font-bold uppercase mb-1" style={{ color: '#475569', letterSpacing: '0.07em' }}>
+            Final Score
+          </p>
+          <p
+            className="font-black"
+            style={{ fontSize: '2.2rem', color: '#A78BFA', lineHeight: 1, fontFamily: "'Space Grotesk', sans-serif" }}
+          >
+            {score}/{total}
+          </p>
+          <p className="text-sm font-bold mt-1" style={{ color: '#6D28D9' }}>
+            {pct}%
+          </p>
+        </div>
+
+        <div className="flex flex-col gap-[24px]" style={{ marginBottom: '24px' }}>
           <InfoRow label="Topic" value={topic} />
           <InfoRow label="Difficulty" value={difficulty} />
           <InfoRow label="Questions" value={`${total} total`} />
-          <InfoRow label="Score" value={`${score} / ${total}`} highlight />
         </div>
 
         <SidebarDivider />
 
-        <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+        <div className="mt-auto flex flex-col gap-[24px]">
           <button
             onClick={onNewTopic}
-            className="btn-duo btn-duo-green"
             type="button"
             id="new-topic-btn"
-            style={{ width: '100%' }}
+            className="w-full flex items-center justify-center gap-2 font-bold rounded-xl transition-all"
+            style={{
+              padding: '12px 20px',
+              fontSize: '1rem',
+              background: 'linear-gradient(135deg, #6D28D9 0%, #8B5CF6 55%, #A78BFA 100%)',
+              color: 'white',
+              border: '1px solid rgba(139,92,246,0.45)',
+              boxShadow: '0 4px 16px rgba(139,92,246,0.35)',
+              cursor: 'pointer',
+            }}
           >
-            <Home size={16} strokeWidth={2.5} />
-            New Topic
+            <Home size={15} strokeWidth={2.5} />
+            Try Another Topic
           </button>
           <button
             onClick={onRetry}
             disabled={retryLoading}
-            className="btn-duo btn-duo-ghost"
             type="button"
             id="retry-btn"
-            style={{ width: '100%' }}
+            className="w-full flex items-center justify-center gap-2 font-bold rounded-xl transition-all border"
+            style={{
+              padding: '12px 20px',
+              fontSize: '1rem',
+              background: 'transparent',
+              color: '#A78BFA',
+              borderColor: 'rgba(139,92,246,0.3)',
+              cursor: retryLoading ? 'not-allowed' : 'pointer',
+              opacity: retryLoading ? 0.5 : 1,
+            }}
           >
-            <RefreshCw size={16} strokeWidth={2.5} />
-            Retry
+            <RotateCcw size={15} strokeWidth={2.5} />
+            Go Again
           </button>
         </div>
       </aside>
     );
   }
 
-  /* ── LOADING / default variant ────────────────────────────────────── */
+  /* ── LOADING / default variant ──────────────────────────────────── */
   return (
     <aside className="sidebar">
       <SidebarBrand />
-      
+
       {topic && (
-        <div style={{ marginBottom: '16px' }}>
+        <div className="mb-4">
           <SectionLabel>Generating quiz for</SectionLabel>
-          <p style={{ fontWeight: 800, fontSize: '0.95rem', color: '#3C3C3C', marginBottom: '14px' }}>{topic}</p>
+          <p className="font-bold text-sm mb-3" style={{ color: '#F1F5F9' }}>{topic}</p>
           {difficulty && (
             <>
-              <SectionLabel>Difficulty</SectionLabel>
+              <SectionLabel>Level</SectionLabel>
               <DifficultyBadge level={difficulty} />
             </>
           )}
@@ -403,25 +413,25 @@ export default function Sidebar({
 
       <SidebarDivider />
 
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '10px' }}>
+      <div className="flex-1 flex flex-col gap-2.5">
         <StatCard
           icon={InfinityIcon}
-          iconColor="#1CB0F6"
-          iconBg="#D2F4FF"
+          iconColor="#22D3EE"
+          iconBg="rgba(6,182,212,0.15)"
           label="Topics Available"
           value="Unlimited"
         />
         <StatCard
           icon={Bot}
-          iconColor="#CE82FF"
-          iconBg="#F3E8FF"
+          iconColor="#A78BFA"
+          iconBg="rgba(139,92,246,0.15)"
           label="Powered by"
           value="Groq AI"
         />
         <StatCard
           icon={List}
-          iconColor="#58CC02"
-          iconBg="#D7FFB8"
+          iconColor="#34D399"
+          iconBg="rgba(16,185,129,0.15)"
           label="Questions per Quiz"
           value={numQuestions ? numQuestions.toString() : "5 – 15"}
         />

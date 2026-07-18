@@ -4,7 +4,7 @@ import { useQuizContext } from '../context/QuizContext';
 import ResultSummary from '../components/ResultSummary';
 import LoadingState from '../components/LoadingState';
 import Sidebar from '../components/Sidebar';
-import { CheckCircle2, XCircle, Lightbulb } from 'lucide-react';
+import { CheckCircle2, XCircle, Lightbulb, MinusCircle } from 'lucide-react';
 
 const LETTERS = ['A', 'B', 'C', 'D'];
 
@@ -48,133 +48,162 @@ export default function ResultsPage() {
 
       {/* ── Main content ─────────────────────────── */}
       <div className="content-area">
-        <main style={{ padding: '48px 56px', width: '100%', overflowY: 'auto' }}>
+        <main className="w-full" style={{ padding: '32px 48px', overflowY: 'auto' }}>
+
           {/* Score summary */}
           <ResultSummary score={score} total={total} feedbackText={feedbackText} />
 
           {/* Divider */}
-          <div style={{ height: '2px', background: '#E5E5E5', margin: '40px 0' }} />
+          <div
+            style={{ height: '1px', background: 'linear-gradient(90deg, transparent, rgba(139,92,246,0.3), transparent)', marginTop: '16px', marginBottom: '24px' }}
+          />
 
-          {/* Question breakdown */}
-          <h2 style={{ fontWeight: 900, fontSize: '1.3rem', color: '#3C3C3C', marginBottom: '20px' }}>
-            Question Breakdown
-          </h2>
+          {/* Section heading */}
+          <div className="flex items-center gap-3" style={{ marginBottom: '24px' }}>
+            <h2
+              className="font-black text-xl"
+              style={{ color: '#F1F5F9', fontFamily: "'Space Grotesk', sans-serif" }}
+            >
+              Your Answer Log
+            </h2>
+            <span
+              className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold border"
+              style={{
+                background: 'rgba(139,92,246,0.1)',
+                borderColor: 'rgba(139,92,246,0.25)',
+                color: '#A78BFA',
+              }}
+            >
+              {results.length} questions
+            </span>
+          </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          {/* Question breakdown — single column cards */}
+          <div className="flex flex-col gap-[32px]" style={{ minWidth: 0 }}>
             {results.map((r, idx) => (
               <article
                 key={r.id}
-                className="duo-card"
+                className="rounded-2xl overflow-hidden border"
                 style={{
-                  padding: '20px 24px',
-                  borderLeft: `5px solid ${r.isCorrect ? '#58CC02' : '#FF4B4B'}`,
-                  borderRadius: '14px',
+                  borderColor: r.isCorrect ? 'rgba(16,185,129,0.25)' : 'rgba(239,68,68,0.25)',
+                  background: 'rgba(13,18,37,0.85)',
+                  backdropFilter: 'blur(16px)',
                   animation: 'var(--animate-fade-up)',
                   animationDelay: `${idx * 0.05}s`,
                   animationFillMode: 'both',
                   opacity: 0,
+                  minWidth: 0,
                 }}
               >
-                {/* Header */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '16px', marginBottom: '14px' }}>
-                  <h3 style={{ fontWeight: 700, fontSize: '1rem', color: '#3C3C3C', lineHeight: 1.5, flex: 1 }}>
-                    <span style={{ color: '#AFAFAF', fontFamily: 'monospace', marginRight: '6px' }}>Q{idx + 1}.</span>
-                    {r.question}
-                  </h3>
-                  <span
-                    style={{
-                      flexShrink: 0,
-                      padding: '4px 12px',
-                      borderRadius: '999px',
-                      fontWeight: 800,
-                      fontSize: '0.8rem',
-                      background: r.isCorrect ? '#D7FFB8' : '#FFD2D2',
-                      color: r.isCorrect ? '#4CAD02' : '#EA2B2B',
-                      border: `2px solid ${r.isCorrect ? '#58CC02' : '#FF4B4B'}`,
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '5px',
-                    }}
-                  >
-                    {r.isCorrect
-                      ? <><CheckCircle2 size={13} strokeWidth={2.5} /> Correct</>
-                      : <><XCircle size={13} strokeWidth={2.5} /> Wrong</>}
-                  </span>
-                </div>
+                {/* Top accent stripe */}
+                <div
+                  className="h-0.5 w-full"
+                  style={{
+                    background: r.isCorrect
+                      ? 'linear-gradient(90deg, #10B981, transparent)'
+                      : 'linear-gradient(90deg, #EF4444, transparent)',
+                  }}
+                />
 
-                {/* Options */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px', marginBottom: '14px' }}>
-                  {r.options.map((opt, oi) => {
-                    const isRight    = oi === r.correctIndex;
-                    const isUserPick = oi === r.selectedIndex;
-                    const isWrong    = isUserPick && !r.isCorrect;
-                    let bg     = 'transparent';
-                    let color  = '#AFAFAF';
-                    let border = '2px solid #E5E5E5';
-
-                    if (isRight)  { bg = '#D7FFB8'; color = '#4CAD02'; border = '2px solid #58CC02'; }
-                    if (isWrong)  { bg = '#FFD2D2'; color = '#EA2B2B'; border = '2px solid #FF4B4B'; }
-
-                    return (
+                <div style={{ padding: '20px 24px' }}>
+                  {/* Header */}
+                  <div className="flex items-start justify-between gap-4" style={{ marginBottom: '20px' }}>
+                    <div className="flex items-start gap-3 flex-1 min-w-0">
+                      {/* Question number badge */}
                       <div
-                        key={oi}
+                        className="shrink-0 flex items-center justify-center w-7 h-7 rounded-lg font-black text-xs mt-0.5"
                         style={{
-                          padding: '8px 12px',
-                          borderRadius: '8px',
-                          background: bg,
-                          border,
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '8px',
-                          fontSize: '0.88rem',
-                          color,
-                          fontWeight: isRight || isWrong ? 700 : 500,
+                          background: r.isCorrect ? 'rgba(16,185,129,0.15)' : 'rgba(239,68,68,0.12)',
+                          color: r.isCorrect ? '#34D399' : '#F87171',
+                          fontFamily: 'monospace',
+                          border: `1px solid ${r.isCorrect ? 'rgba(16,185,129,0.3)' : 'rgba(239,68,68,0.3)'}`,
                         }}
                       >
-                        <span
-                          style={{
-                            width: '20px',
-                            height: '20px',
-                            borderRadius: '4px',
-                            background: isRight ? '#58CC02' : isWrong ? '#FF4B4B' : '#E5E5E5',
-                            color: isRight || isWrong ? 'white' : '#AFAFAF',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            fontSize: '0.7rem',
-                            fontWeight: 800,
-                            flexShrink: 0,
-                          }}
-                        >
-                          {LETTERS[oi]}
-                        </span>
-                        <span style={{ flex: 1 }}>
-                          {opt}
-                          {isRight && <CheckCircle2 size={12} color="#4CAD02" strokeWidth={3} style={{ display: 'inline', marginLeft: '4px', verticalAlign: 'middle' }} />}
-                          {isWrong && <XCircle size={12} color="#EA2B2B" strokeWidth={3} style={{ display: 'inline', marginLeft: '4px', verticalAlign: 'middle' }} />}
-                        </span>
+                        {idx + 1}
                       </div>
-                    );
-                  })}
-                </div>
+                      <h3
+                        className="font-semibold text-sm leading-relaxed"
+                        style={{ color: '#F1F5F9', flex: 1, wordBreak: 'break-word', overflowWrap: 'break-word', minWidth: 0 }}
+                      >
+                        {r.question}
+                      </h3>
+                    </div>
 
-                {/* Explanation */}
-                <div
-                  style={{
-                    background: '#F7F7F7',
-                    border: '2px solid #E5E5E5',
-                    borderRadius: '10px',
-                    padding: '10px 14px',
-                    fontSize: '0.88rem',
-                    color: '#555',
-                    lineHeight: 1.5,
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    gap: '8px',
-                  }}
-                >
-                  <Lightbulb size={15} color="#FFC800" strokeWidth={2.5} style={{ flexShrink: 0, marginTop: '2px' }} />
-                  <span>{r.explanation}</span>
+                    {/* Status badge */}
+                    <span
+                      className="shrink-0 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full font-bold text-xs border"
+                      style={{
+                        background: r.isCorrect ? 'rgba(16,185,129,0.12)' : 'rgba(239,68,68,0.12)',
+                        color: r.isCorrect ? '#34D399' : '#F87171',
+                        borderColor: r.isCorrect ? 'rgba(16,185,129,0.4)' : 'rgba(239,68,68,0.4)',
+                      }}
+                    >
+                      {r.isCorrect
+                        ? <><CheckCircle2 size={12} strokeWidth={2.5} /> Right</>
+                        : r.selectedIndex === -1
+                          ? <><MinusCircle size={12} strokeWidth={2.5} /> Skipped</>
+                          : <><XCircle size={12} strokeWidth={2.5} /> Missed</>}
+                    </span>
+                  </div>
+
+                  {/* Options — 2x2 grid */}
+                  <div className="grid grid-cols-2 gap-2" style={{ marginBottom: '16px' }}>
+                    {r.options.map((opt, oi) => {
+                      const isRight    = oi === r.correctIndex;
+                      const isUserPick = oi === r.selectedIndex;
+                      const isWrong    = isUserPick && !r.isCorrect;
+
+                      let bg     = 'transparent';
+                      let color  = '#475569';
+                      let border = '1px solid rgba(148,163,184,0.1)';
+
+                      if (isRight)  { bg = 'rgba(16,185,129,0.1)'; color = '#34D399'; border = '1px solid rgba(16,185,129,0.35)'; }
+                      if (isWrong)  { bg = 'rgba(239,68,68,0.1)';  color = '#F87171'; border = '1px solid rgba(239,68,68,0.35)'; }
+
+                      return (
+                        <div
+                          key={oi}
+                          className="flex items-center gap-2.5 rounded-xl text-xs font-medium min-w-0"
+                          style={{ padding: '16px 20px', background: bg, border, color, minWidth: 0 }}
+                        >
+                          <span
+                            className="flex items-center justify-center rounded font-black text-xs shrink-0"
+                            style={{
+                              width: '20px',
+                              height: '20px',
+                              background: isRight ? '#10B981' : isWrong ? '#EF4444' : 'rgba(148,163,184,0.1)',
+                              color: isRight || isWrong ? 'white' : '#475569',
+                              borderRadius: '4px',
+                            }}
+                          >
+                            {LETTERS[oi]}
+                          </span>
+                          <span
+                            className="flex-1 leading-snug"
+                            style={{ wordBreak: 'break-word', overflowWrap: 'break-word', minWidth: 0 }}
+                          >
+                            {opt}
+                            {isRight && <CheckCircle2 size={11} color="#34D399" strokeWidth={3} style={{ display: 'inline', marginLeft: '4px', verticalAlign: 'middle' }} />}
+                            {isWrong && <XCircle size={11} color="#F87171" strokeWidth={3} style={{ display: 'inline', marginLeft: '4px', verticalAlign: 'middle' }} />}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* Explanation */}
+                  <div
+                    className="flex items-start gap-2.5 rounded-xl text-xs leading-relaxed"
+                    style={{
+                      padding: '10px 14px',
+                      background: 'rgba(139,92,246,0.07)',
+                      border: '1px solid rgba(139,92,246,0.18)',
+                      color: '#94A3B8',
+                    }}
+                  >
+                    <Lightbulb size={14} color="#FCD34D" strokeWidth={2.5} className="shrink-0 mt-0.5" />
+                    <span>{r.explanation}</span>
+                  </div>
                 </div>
               </article>
             ))}

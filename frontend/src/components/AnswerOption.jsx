@@ -12,24 +12,24 @@ export default function AnswerOption({
   onClick,
 }) {
   let stateClass = '';
-  let badgeStyle = { color: '#AFAFAF', borderColor: '#AFAFAF', background: 'transparent' };
+  let badgeStyle = { color: '#475569', borderColor: '#475569', background: 'transparent' };
   let trailingIcon = null;
 
   if (isRevealed) {
     if (isCorrect) {
       stateClass = 'correct';
-      badgeStyle = { color: '#58CC02', borderColor: '#58CC02', background: '#D7FFB8' };
-      trailingIcon = <Check size={18} color="#4CAD02" strokeWidth={3} style={{ flexShrink: 0, marginLeft: 'auto' }} />;
+      badgeStyle = { color: '#34D399', borderColor: '#34D399', background: 'rgba(16,185,129,0.15)' };
+      trailingIcon = <Check size={18} color="#34D399" strokeWidth={3} style={{ flexShrink: 0, marginLeft: 'auto' }} />;
     } else if (isSelected) {
       stateClass = 'wrong';
-      badgeStyle = { color: '#FF4B4B', borderColor: '#FF4B4B', background: '#FFD2D2' };
-      trailingIcon = <X size={18} color="#EA2B2B" strokeWidth={3} style={{ flexShrink: 0, marginLeft: 'auto' }} />;
+      badgeStyle = { color: '#F87171', borderColor: '#F87171', background: 'rgba(239,68,68,0.15)' };
+      trailingIcon = <X size={18} color="#F87171" strokeWidth={3} style={{ flexShrink: 0, marginLeft: 'auto' }} />;
     } else {
       stateClass = 'dimmed';
     }
   } else if (isSelected) {
     stateClass = 'selected';
-    badgeStyle = { color: '#1CB0F6', borderColor: '#1CB0F6', background: '#D2F4FF' };
+    badgeStyle = { color: '#A78BFA', borderColor: '#A78BFA', background: 'rgba(139,92,246,0.15)' };
   }
 
   return (
@@ -39,6 +39,7 @@ export default function AnswerOption({
       disabled={disabled}
       aria-label={`Option ${LETTERS[index]}: ${option}`}
       className={`answer-option stagger-item ${stateClass}`}
+      style={{ marginBottom: '10px' }}
     >
       <span className="answer-badge" style={badgeStyle}>
         {LETTERS[index]}

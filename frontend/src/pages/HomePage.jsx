@@ -7,40 +7,27 @@ import Sidebar from '../components/Sidebar';
 import {
   Sparkles, Loader2, AlertTriangle, X,
   Brain, Zap, Shield, Clock,
-  ArrowRight,
+  Minus, Plus, ArrowRight,
 } from 'lucide-react';
 
-/* ── Feature highlight card ──────────────────────────────────────────── */
-function FeatureCard({ icon: Icon, iconColor, iconBg, title, description }) {
+/* ── How-It-Works step ───────────────────────────────────────────── */
+function HowStep({ n, text, sub }) {
   return (
-    <div
-      style={{
-        display: 'flex',
-        alignItems: 'flex-start',
-        gap: '14px',
-        padding: '16px 18px',
-        background: 'white',
-        border: '2px solid #E5E5E5',
-        borderRadius: '14px',
-      }}
-    >
+    <div className="flex items-start gap-4">
       <div
+        className="shrink-0 flex items-center justify-center w-8 h-8 rounded-full font-black text-xs text-white"
         style={{
-          width: '40px',
-          height: '40px',
-          borderRadius: '10px',
-          background: iconBg,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          flexShrink: 0,
+          background: 'linear-gradient(135deg, #6D28D9, #8B5CF6)',
+          boxShadow: '0 0 14px rgba(139,92,246,0.45)',
+          fontFamily: "'Space Grotesk', sans-serif",
+          minWidth: '32px',
         }}
       >
-        <Icon size={20} color={iconColor} strokeWidth={2.5} />
+        {n}
       </div>
-      <div>
-        <p style={{ fontWeight: 800, fontSize: '0.92rem', color: '#3C3C3C', marginBottom: '3px' }}>{title}</p>
-        <p style={{ fontSize: '0.82rem', color: '#777', lineHeight: 1.45 }}>{description}</p>
+      <div style={{ paddingTop: '2px' }}>
+        <p className="font-bold text-sm" style={{ color: '#F1F5F9', lineHeight: 1.4 }}>{text}</p>
+        {sub && <p className="text-xs" style={{ color: '#475569', marginTop: '4px' }}>{sub}</p>}
       </div>
     </div>
   );
@@ -72,236 +59,404 @@ export default function HomePage() {
     );
   }
 
-  /* ── Normal setup state ──────────────────────────────────────────── */
+  /* ── Normal setup state (no sidebar — full page) ─────────────────── */
   return (
-    <div className="app-shell">
-      <Sidebar variant="home" />
+    <div className="flex flex-col" style={{ background: '#080C18', overflow: 'hidden', height: '100dvh' }}>
 
-      <div className="content-area">
-        <main
+      {/* ── Top navbar ──────────────────────────────────────────────── */}
+      <header
+        className="flex items-center justify-between border-b"
+        style={{
+          borderColor: 'rgba(148,163,184,0.08)',
+          background: 'rgba(13,18,37,0.8)',
+          backdropFilter: 'blur(20px)',
+          position: 'sticky',
+          top: 0,
+          zIndex: 50,
+          paddingTop: '22px',
+          paddingBottom: '22px',
+          paddingLeft: '40px',
+          paddingRight: '40px',
+          minHeight: '80px',
+        }}
+      >
+        {/* Brand */}
+        <div className="flex items-center gap-[14px]">
+          <div
+            className="flex items-center justify-center w-9 h-9 rounded-xl shrink-0"
+            style={{
+              background: 'linear-gradient(135deg, #6D28D9 0%, #8B5CF6 55%, #A78BFA 100%)',
+              boxShadow: '0 4px 16px rgba(139,92,246,0.4)',
+            }}
+          >
+            <Brain size={20} color="white" strokeWidth={2.5} />
+          </div>
+          <div>
+            <h2
+              className="font-black"
+              style={{ color: '#F1F5F9', fontFamily: "'Space Grotesk', sans-serif", fontSize: '26px', lineHeight: 1 }}
+            >
+              QuizGenius
+            </h2>
+          </div>
+        </div>
+
+        {/* Nav badge */}
+        <div
+          className="inline-flex items-center gap-2 rounded-full text-sm font-bold border"
           style={{
-            flex: 1,
-            padding: '40px 48px 48px 56px',
-            display: 'flex',
-            flexDirection: 'column',
-            minHeight: '100vh',
+            padding: '6px 12px',
+            background: 'rgba(139,92,246,0.1)',
+            borderColor: 'rgba(139,92,246,0.3)',
+            color: '#A78BFA',
           }}
         >
-          {/* ── Hero banner — full width ──────────────────────────── */}
+          <Zap size={12} strokeWidth={2.5} />
+          Powered by Groq AI
+        </div>
+      </header>
+
+      {/* ── Main body: split layout ──────────────────────────────────── */}
+      <main className="flex-1 flex" style={{ minHeight: 0 }}>
+
+        {/* ── LEFT PANEL: hero + how it works ─────────────────────── */}
+        <div
+          className="hidden lg:flex flex-col justify-start"
+          style={{
+            flex: '0 0 44%',
+            padding: '32px 48px 24px 48px',
+            borderRight: '1px solid rgba(148,163,184,0.07)',
+            background: 'linear-gradient(145deg, rgba(109,40,217,0.06) 0%, transparent 60%)',
+          }}
+        >
+          {/* Eyebrow */}
           <div
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold self-start border"
             style={{
-              background: 'linear-gradient(135deg, #58CC02 0%, #3ea800 100%)',
-              borderRadius: '20px',
-              padding: '28px 36px',
-              marginBottom: '32px',
-              boxShadow: '0 6px 0 #2e7a00',
-              position: 'relative',
-              overflow: 'hidden',
-              animation: 'var(--animate-fade-up)',
+              background: 'rgba(13,18,37,0.7)',
+              borderColor: 'rgba(148,163,184,0.12)',
+              color: '#A78BFA',
+              marginBottom: '16px',
             }}
           >
-            {/* Decorative blobs */}
-            <div style={{ position: 'absolute', top: '-28px', right: '-28px', width: '140px', height: '140px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)' }} />
-            <div style={{ position: 'absolute', bottom: '-36px', right: '100px', width: '90px', height: '90px', borderRadius: '50%', background: 'rgba(255,255,255,0.07)' }} />
-            <div style={{ position: 'absolute', top: '50%', right: '36px', transform: 'translateY(-50%)', opacity: 0.15 }}>
-              <Brain size={72} color="white" strokeWidth={1} />
-            </div>
-
-            <h1 style={{ fontWeight: 900, fontSize: '2.1rem', color: 'white', lineHeight: 1.1, marginBottom: '8px', position: 'relative' }}>
-              Start a Quiz
-            </h1>
-            <p style={{ color: 'rgba(255,255,255,0.88)', fontSize: '1rem', lineHeight: 1.5, position: 'relative', maxWidth: '520px' }}>
-              Pick any topic, choose your difficulty, and let Groq AI generate a personalized quiz in seconds.
-            </p>
+            <Sparkles size={12} strokeWidth={2.5} />
+            New quiz in under 10 seconds
           </div>
 
-          {/* ── Two-column body ───────────────────────────────────── */}
-          <div
+          {/* Headline */}
+          <h1
+            className="font-black leading-none"
             style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 380px',
-              gap: '28px',
-              flex: 1,
-              alignItems: 'start',
-              animation: 'var(--animate-fade-up)',
-              animationDelay: '0.05s',
-              animationFillMode: 'both',
+              fontSize: 'clamp(2.2rem, 3.5vw, 3.2rem)',
+              color: '#F1F5F9',
+              fontFamily: "'Space Grotesk', sans-serif",
+              lineHeight: 1.05,
+              marginBottom: '12px',
             }}
           >
-            {/* ── LEFT COLUMN: form ────────────────────────────── */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
-              {/* Error banner */}
-              {error && (
-                <div
-                  style={{
-                    background: '#FFD2D2',
-                    border: '2px solid #FF4B4B',
-                    borderRadius: '12px',
-                    padding: '14px 18px',
-                    marginBottom: '20px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '12px',
-                  }}
-                  role="alert"
-                >
-                  <AlertTriangle size={20} color="#EA2B2B" strokeWidth={2.5} style={{ flexShrink: 0 }} />
-                  <div style={{ flex: 1 }}>
-                    <p style={{ fontWeight: 700, color: '#EA2B2B', fontSize: '0.95rem' }}>{error}</p>
-                    <button
-                      onClick={clearError}
-                      type="button"
-                      style={{ color: '#EA2B2B', background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 700, marginTop: '4px', padding: 0 }}
-                    >
-                      Dismiss
-                    </button>
-                  </div>
-                  <button onClick={clearError} type="button" aria-label="Dismiss error" style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#EA2B2B', display: 'flex' }}>
-                    <X size={16} strokeWidth={2.5} />
+            Build Your{' '}
+            <span
+              style={{
+                background: 'linear-gradient(135deg, #8B5CF6 0%, #A78BFA 55%, #C4B5FD 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+              }}
+            >
+              Challenge.
+            </span>
+          </h1>
+
+          <p
+            className="text-lg font-medium leading-relaxed"
+            style={{ color: '#94A3B8', maxWidth: '420px', marginBottom: '20px' }}
+          >
+            Pick any subject, dial in the difficulty, and let Groq AI assemble a
+            fully-unique quiz — just for you.
+          </p>
+
+          {/* How it works */}
+          <div
+            className="rounded-2xl"
+            style={{
+              padding: '16px 20px',
+              background: 'rgba(13,18,37,0.75)',
+              border: '1px solid rgba(148,163,184,0.09)',
+              backdropFilter: 'blur(12px)',
+              maxWidth: '400px',
+            }}
+          >
+            <p
+              className="text-xs font-bold uppercase"
+              style={{ color: '#475569', letterSpacing: '0.08em', marginBottom: '12px' }}
+            >
+              How it works
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <HowStep n="1" text="Enter any topic you want to be quizzed on" sub="Or pick one of the quick suggestions" />
+              <HowStep n="2" text="Choose your difficulty and question count" sub="5 to 15 questions, three challenge levels" />
+              <HowStep n="3" text="AI builds a fresh quiz in seconds" sub="Unique every time — no repeat questions" />
+              <HowStep n="4" text="Answer, get instant feedback, and see your score" sub="With detailed explanations for every answer" />
+            </div>
+          </div>
+
+          {/* Feature pills */}
+          <div className="flex flex-wrap gap-2" style={{ marginTop: '16px' }}>
+            {[
+              { Icon: Zap, text: 'Lightning Fast', color: '#FCD34D' },
+              { Icon: Shield, text: 'Server-Scored', color: '#22D3EE' },
+              { Icon: Clock, text: '30s Per Question', color: '#A78BFA' },
+            ].map(({ Icon, text, color }) => (
+              <div
+                key={text}
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold border"
+                style={{
+                  background: 'rgba(13,18,37,0.7)',
+                  borderColor: 'rgba(148,163,184,0.12)',
+                  color,
+                }}
+              >
+                <Icon size={12} strokeWidth={2.5} />
+                {text}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── RIGHT PANEL: quiz config form ─────────────────────────── */}
+        <div
+          className="flex-1 flex flex-col items-center justify-start"
+          style={{
+            padding: '32px 40px 24px 40px',
+            maxWidth: '100%',
+            overflowY: 'auto',
+          }}
+        >
+          <div className="w-full" style={{ maxWidth: '640px' }}>
+
+            {/* Panel heading (visible on mobile only) */}
+            <div className="lg:hidden mb-6">
+              <h1
+                className="font-black text-3xl mb-1"
+                style={{ color: '#F1F5F9', fontFamily: "'Space Grotesk', sans-serif" }}
+              >
+                Build Your Challenge
+              </h1>
+              <p className="text-sm" style={{ color: '#94A3B8' }}>
+                Pick a topic and let the AI do the rest.
+              </p>
+            </div>
+
+            {/* Error banner */}
+            {error && (
+              <div
+                className="flex items-start gap-4 rounded-xl border"
+                style={{
+                  padding: '20px',
+                  marginBottom: '24px',
+                  background: 'rgba(239,68,68,0.1)',
+                  borderColor: 'rgba(239,68,68,0.35)',
+                  backdropFilter: 'blur(8px)',
+                }}
+                role="alert"
+              >
+                <AlertTriangle size={18} color="#F87171" strokeWidth={2.5} className="shrink-0 mt-0.5" />
+                <div className="flex-1 min-w-0">
+                  <p className="font-bold text-sm" style={{ color: '#F87171' }}>{error}</p>
+                  <button
+                    onClick={clearError}
+                    type="button"
+                    className="text-xs font-semibold"
+                    style={{ color: '#F87171', background: 'none', border: 'none', cursor: 'pointer', padding: 0, marginTop: '6px' }}
+                  >
+                    Dismiss
                   </button>
                 </div>
-              )}
+                <button
+                  onClick={clearError}
+                  type="button"
+                  aria-label="Dismiss error"
+                  className="shrink-0 flex"
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#F87171' }}
+                >
+                  <X size={15} strokeWidth={2.5} />
+                </button>
+              </div>
+            )}
 
-              {/* Form card */}
-              <div
-                className="duo-card"
-                style={{ padding: '28px 32px', display: 'flex', flexDirection: 'column', gap: '28px' }}
-              >
+            {/* ── Form card ─────────────────────────────────────────── */}
+            <div
+              className="rounded-2xl"
+              style={{
+                padding: '20px 20px 16px 20px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0',
+                background: 'rgba(13,18,37,0.88)',
+                border: '1px solid rgba(148,163,184,0.1)',
+                backdropFilter: 'blur(20px)',
+                boxShadow: '0 0 0 1px rgba(148,163,184,0.08), 0 8px 40px rgba(0,0,0,0.5)',
+              }}
+            >
+              {/* Section: Topic Selector */}
+              <div>
                 <TopicSelector value={topic} onChange={setTopic} />
-                <DifficultySelector value={difficulty} onChange={setDifficulty} />
+              </div>
 
-                {/* Question count */}
-                <div>
-                  <label
+              {/* Divider */}
+              <div
+                style={{
+                  height: '1px',
+                  margin: '16px 0',
+                  background: 'linear-gradient(90deg, transparent, rgba(139,92,246,0.2), transparent)',
+                }}
+              />
+
+              {/* Section: Difficulty */}
+              <div>
+                <DifficultySelector value={difficulty} onChange={setDifficulty} />
+              </div>
+
+              {/* Divider */}
+              <div
+                style={{
+                  height: '1px',
+                  margin: '16px 0',
+                  background: 'linear-gradient(90deg, transparent, rgba(139,92,246,0.2), transparent)',
+                }}
+              />
+
+              {/* ── Question count — stepper ───────────────────────── */}
+              <div>
+                <p
+                  className="text-xs font-bold uppercase tracking-widest"
+                  style={{ color: '#94A3B8', letterSpacing: '0.08em', marginBottom: '10px' }}
+                >
+                  Number of Questions
+                </p>
+                <div className="flex items-center gap-4">
+                  {/* Minus button */}
+                  <button
+                    type="button"
+                    onClick={() => setNumQuestions(Math.max(5, numQuestions - 1))}
+                    disabled={numQuestions <= 5}
+                    className="flex items-center justify-center w-9 h-9 rounded-xl border font-bold text-base transition-all"
                     style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      fontWeight: 800,
-                      fontSize: '0.85rem',
-                      letterSpacing: '0.06em',
-                      textTransform: 'uppercase',
-                      color: '#777',
-                      marginBottom: '12px',
+                      background: numQuestions <= 5 ? 'rgba(71,85,105,0.1)' : 'rgba(139,92,246,0.1)',
+                      borderColor: numQuestions <= 5 ? 'rgba(148,163,184,0.12)' : 'rgba(139,92,246,0.3)',
+                      color: numQuestions <= 5 ? '#475569' : '#A78BFA',
+                      cursor: numQuestions <= 5 ? 'not-allowed' : 'pointer',
+                      flexShrink: 0,
                     }}
+                    aria-label="Decrease question count"
                   >
-                    <span>Number of Questions</span>
+                    <Minus size={16} strokeWidth={2.5} />
+                  </button>
+
+                  {/* Count display */}
+                  <div className="flex-1 text-center">
                     <span
+                      className="font-black"
                       style={{
-                        background: '#D7FFB8',
-                        border: '2px solid #58CC02',
-                        borderRadius: '999px',
-                        padding: '3px 14px',
-                        color: '#4CAD02',
-                        fontWeight: 900,
-                        fontSize: '1rem',
+                        fontSize: '2.0rem',
+                        lineHeight: 1,
+                        color: '#A78BFA',
+                        fontFamily: "'Space Grotesk', sans-serif",
+                        display: 'block',
                       }}
                     >
                       {numQuestions}
                     </span>
-                  </label>
-                  <input
-                    type="range"
-                    min={5}
-                    max={15}
-                    step={1}
-                    value={numQuestions}
-                    onChange={(e) => setNumQuestions(parseInt(e.target.value, 10))}
-                    aria-label="Number of questions"
-                  />
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: '#AFAFAF', marginTop: '6px' }}>
-                    <span>5</span><span>10</span><span>15</span>
+                    <p className="text-xs font-medium" style={{ color: '#475569', marginTop: '4px' }}>
+                      {numQuestions === 1 ? 'question' : 'questions'}
+                    </p>
                   </div>
+
+                  {/* Plus button */}
+                  <button
+                    type="button"
+                    onClick={() => setNumQuestions(Math.min(15, numQuestions + 1))}
+                    disabled={numQuestions >= 15}
+                    className="flex items-center justify-center w-9 h-9 rounded-xl border font-bold text-base transition-all"
+                    style={{
+                      background: numQuestions >= 15 ? 'rgba(71,85,105,0.1)' : 'rgba(139,92,246,0.1)',
+                      borderColor: numQuestions >= 15 ? 'rgba(148,163,184,0.12)' : 'rgba(139,92,246,0.3)',
+                      color: numQuestions >= 15 ? '#475569' : '#A78BFA',
+                      cursor: numQuestions >= 15 ? 'not-allowed' : 'pointer',
+                      flexShrink: 0,
+                    }}
+                    aria-label="Increase question count"
+                  >
+                    <Plus size={16} strokeWidth={2.5} />
+                  </button>
                 </div>
 
-                {/* CTA */}
-                <button
-                  onClick={handleStart}
-                  disabled={!topic.trim() || loading}
-                  className="btn-duo btn-duo-green"
-                  type="button"
-                  id="start-quiz-btn"
-                  style={{ width: '100%', fontSize: '1.1rem', padding: '16px' }}
-                >
-                  {loading
-                    ? <><Loader2 size={18} strokeWidth={2.5} style={{ animation: 'spin-slow 1s linear infinite' }} /> Generating…</>
-                    : <><Sparkles size={18} strokeWidth={2.5} /> Start Quiz</>}
-                </button>
-              </div>
-            </div>
-
-            {/* ── RIGHT COLUMN: feature info ───────────────────── */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              {/* How it works */}
-              <div
-                style={{
-                  background: 'white',
-                  border: '2px solid #E5E5E5',
-                  borderRadius: '16px',
-                  padding: '20px 22px',
-                  marginBottom: '4px',
-                }}
-              >
-                <p style={{ fontWeight: 800, fontSize: '0.78rem', letterSpacing: '0.07em', textTransform: 'uppercase', color: '#AFAFAF', marginBottom: '14px' }}>
-                  How it works
-                </p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                  {[
-                    { n: '1', text: 'Type any topic or pick from suggestions' },
-                    { n: '2', text: 'Set difficulty and number of questions' },
-                    { n: '3', text: 'Groq AI generates your quiz instantly' },
-                    { n: '4', text: 'Answer, get feedback, and see your score' },
-                  ].map(({ n, text }) => (
-                    <div key={n} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                      <span
-                        style={{
-                          width: '26px',
-                          height: '26px',
-                          borderRadius: '50%',
-                          background: '#58CC02',
-                          color: 'white',
-                          fontWeight: 900,
-                          fontSize: '0.78rem',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          flexShrink: 0,
-                        }}
-                      >
-                        {n}
-                      </span>
-                      <p style={{ fontSize: '0.88rem', color: '#555', fontWeight: 600, lineHeight: 1.4 }}>{text}</p>
-                    </div>
+                {/* Range hint */}
+                <div className="flex justify-between px-1" style={{ marginTop: '8px' }}>
+                  {[5, 8, 10, 12, 15].map((v) => (
+                    <button
+                      key={v}
+                      type="button"
+                      onClick={() => setNumQuestions(v)}
+                      className="text-xs font-semibold transition-colors"
+                      style={{ color: numQuestions === v ? '#A78BFA' : '#475569', background: 'none', border: 'none', cursor: 'pointer', padding: '2px 4px' }}
+                    >
+                      {v}
+                    </button>
                   ))}
                 </div>
               </div>
 
-              {/* Features */}
-              <FeatureCard
-                icon={Zap}
-                iconColor="#FFC800"
-                iconBg="#FFF5CC"
-                title="Instant Generation"
-                description="Questions are AI-crafted in 5–10 seconds, unique every time."
-              />
-              <FeatureCard
-                icon={Shield}
-                iconColor="#1CB0F6"
-                iconBg="#D2F4FF"
-                title="Server-Side Scoring"
-                description="Answers are signed and verified server-side — no cheating."
-              />
-              <FeatureCard
-                icon={Brain}
-                iconColor="#CE82FF"
-                iconBg="#F3E8FF"
-                title="Any Topic, Any Level"
-                description="From quantum physics to 90s hip-hop — any subject, three difficulties."
-              />
+              {/* ── CTA button ─────────────────────────────────────── */}
+              <div style={{ marginTop: '16px' }}>
+                <button
+                  onClick={handleStart}
+                  disabled={!topic.trim() || loading}
+                  type="button"
+                  id="start-quiz-btn"
+                  className="w-full flex items-center justify-center gap-3 font-bold rounded-xl transition-all"
+                  style={{
+                    padding: '11px 20px',
+                    fontSize: '0.95rem',
+                    background: !topic.trim() || loading
+                      ? 'rgba(109,40,217,0.35)'
+                      : 'linear-gradient(135deg, #6D28D9 0%, #8B5CF6 55%, #A78BFA 100%)',
+                    color: 'white',
+                    border: '1px solid rgba(139,92,246,0.45)',
+                    boxShadow: !topic.trim() || loading
+                      ? 'none'
+                      : '0 4px 20px rgba(139,92,246,0.4), inset 0 1px 0 rgba(255,255,255,0.12)',
+                    cursor: !topic.trim() || loading ? 'not-allowed' : 'pointer',
+                    opacity: !topic.trim() || loading ? 0.6 : 1,
+                    letterSpacing: '0.02em',
+                  }}
+                >
+                  {loading ? (
+                    <>
+                      <Loader2 size={18} strokeWidth={2.5} style={{ animation: 'spin-slow 1s linear infinite' }} />
+                      Generating your quiz…
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles size={18} strokeWidth={2.5} />
+                      Launch the Quiz
+                      <ArrowRight size={16} strokeWidth={2.5} />
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
+
+            {/* Footer note */}
+            <p
+              className="text-center text-xs font-medium"
+              style={{ color: '#475569', marginTop: '10px' }}
+            >
+              Unique questions generated fresh every session
+            </p>
           </div>
-        </main>
-      </div>
+        </div>
+      </main>
     </div>
   );
 }

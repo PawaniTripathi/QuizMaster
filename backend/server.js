@@ -260,8 +260,11 @@ app.post('/api/quiz/submit', async (req, res) => {
 
 // ─── Serve frontend in production ───────────────────────────────────────────────
 
-// Removed: Frontend is deployed separately on Vercel. 
-// The backend only needs to serve API routes.
+app.use(express.static(path.join(__dirname, '..', 'frontend', 'dist')));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'frontend', 'dist', 'index.html'));
+});
 
 // ─── Start server ───────────────────────────────────────────────────────────────
 
